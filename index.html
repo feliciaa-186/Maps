@@ -1,52 +1,153 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>NCR Business Analyzer — Single File</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Tailwind (for styling) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delhi Business Intelligence Suite</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
   <style>
-    html,body,#root { height: 100%; margin: 0; }
+    html, body { height: 100%; margin: 0; overflow: hidden; }
+    .app-container { display: none; height: calc(100vh - 130px); overflow-y: auto; }
+    .app-container.active { display: block; }
     .custom-marker { pointer-events: auto; }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
-  <div id="root"></div>
+<body class="bg-gray-50">
+  <div id="root">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 py-4">
+        <h1 class="text-2xl font-bold">🚀 Delhi Business Intelligence Suite</h1>
+        <p class="text-indigo-100 text-sm">Unified Market Analysis Platform</p>
+      </div>
+    </header>
 
-  <!-- React + ReactDOM UMD -->
+    <!-- Tab Navigation -->
+    <nav class="bg-white shadow-md border-b-2 border-gray-200">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex space-x-1">
+          <button onclick="switchApp('ncr')" id="tab-ncr" class="px-6 py-3 font-semibold border-b-4 border-indigo-600 text-indigo-600 bg-indigo-50">
+            📍 NCR Location Analyzer
+          </button>
+          <button onclick="switchApp('app2')" id="tab-app2" class="px-6 py-3 font-semibold border-b-4 border-transparent text-gray-600 hover:text-indigo-600 hover:bg-indigo-50">
+            📊 Market Analytics
+          </button>
+          <button onclick="switchApp('app3')" id="tab-app3" class="px-6 py-3 font-semibold border-b-4 border-transparent text-gray-600 hover:text-indigo-600 hover:bg-indigo-50">
+            📈 Business Dashboard
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- App 1: NCR Location Analyzer -->
+    <div id="app-ncr" class="app-container active">
+      <div id="ncr-root"></div>
+    </div>
+
+    <!-- App 2: Market Analytics Placeholder -->
+    <div id="app-app2" class="app-container">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div class="text-6xl mb-4">📊</div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Market Analytics</h2>
+          <p class="text-gray-600 mb-6">Advanced market analysis and competitive intelligence tools</p>
+          <div class="grid md:grid-cols-3 gap-6 mt-8">
+            <div class="bg-blue-50 p-6 rounded-xl">
+              <div class="text-3xl mb-2">📈</div>
+              <h3 class="font-bold text-lg mb-2">Trend Analysis</h3>
+              <p class="text-sm text-gray-600">Real-time market trends and insights</p>
+            </div>
+            <div class="bg-green-50 p-6 rounded-xl">
+              <div class="text-3xl mb-2">💰</div>
+              <h3 class="font-bold text-lg mb-2">Financial Metrics</h3>
+              <p class="text-sm text-gray-600">Revenue and cost optimization</p>
+            </div>
+            <div class="bg-purple-50 p-6 rounded-xl">
+              <div class="text-3xl mb-2">🎯</div>
+              <h3 class="font-bold text-lg mb-2">Target Markets</h3>
+              <p class="text-sm text-gray-600">Identify and analyze opportunities</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App 3: Business Dashboard Placeholder -->
+    <div id="app-app3" class="app-container">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div class="text-6xl mb-4">📈</div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">Business Dashboard</h2>
+          <p class="text-gray-600 mb-6">Comprehensive business performance monitoring</p>
+          <div class="grid md:grid-cols-2 gap-6 mt-8">
+            <div class="bg-indigo-50 p-6 rounded-xl text-left">
+              <div class="text-3xl mb-2">⚡</div>
+              <h3 class="font-bold text-lg mb-2">Real-time KPIs</h3>
+              <p class="text-sm text-gray-600">Monitor key performance indicators across all business units</p>
+            </div>
+            <div class="bg-orange-50 p-6 rounded-xl text-left">
+              <div class="text-3xl mb-2">📊</div>
+              <h3 class="font-bold text-lg mb-2">Custom Reports</h3>
+              <p class="text-sm text-gray-600">Generate detailed analytics reports on demand</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-
-  <!-- Babel for JSX (dev only) -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Turf (UMD) – now unused but harmless; you can remove if you like -->
-  <script src="https://unpkg.com/@turf/turf@6.5.0/turf.min.js"></script>
+  <!-- Tab Switching -->
+  <script>
+    function switchApp(appId) {
+      // Hide all apps
+      document.querySelectorAll('.app-container').forEach(app => {
+        app.classList.remove('active');
+      });
+      
+      // Reset all tabs
+      document.querySelectorAll('nav button').forEach(button => {
+        button.classList.remove('border-indigo-600', 'text-indigo-600', 'bg-indigo-50');
+        button.classList.add('border-transparent', 'text-gray-600');
+      });
+      
+      // Show selected app
+      document.getElementById(`app-${appId}`).classList.add('active');
+      
+      // Activate selected tab
+      const activeTab = document.getElementById(`tab-${appId}`);
+      activeTab.classList.remove('border-transparent', 'text-gray-600');
+      activeTab.classList.add('border-indigo-600', 'text-indigo-600', 'bg-indigo-50');
+      
+      // Save preference
+      localStorage.setItem('activeApp', appId);
+    }
+    
+    // Restore last active app
+    window.addEventListener('DOMContentLoaded', () => {
+      const lastApp = localStorage.getItem('activeApp') || 'ncr';
+      switchApp(lastApp);
+    });
+  </script>
 
+  <!-- NCR Business Analyzer Component -->
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // ---- SIMPLE ICON PLACEHOLDERS ----
-    const IconWrapper = ({ children, className }) => (
-      <span className={className}>{children}</span>
-    );
-    const Building2 = (props) => <IconWrapper {...props}>🏢</IconWrapper>;
-    const Package = (props) => <IconWrapper {...props}>📦</IconWrapper>;
-    const MapPin = (props) => <IconWrapper {...props}>📍</IconWrapper>;
-    const TrendingUp = (props) => <IconWrapper {...props}>📈</IconWrapper>;
-    const Clock = (props) => <IconWrapper {...props}>⏰</IconWrapper>;
-    const Users = (props) => <IconWrapper {...props}>👥</IconWrapper>;
-    const BarChart3 = (props) => <IconWrapper {...props}>📊</IconWrapper>;
-    // ----------------------------------
+    const IconWrapper = ({ children }) => <span>{children}</span>;
+    const Building2 = () => <IconWrapper>🏢</IconWrapper>;
+    const Package = () => <IconWrapper>📦</IconWrapper>;
+    const MapPin = () => <IconWrapper>📍</IconWrapper>;
+    const TrendingUp = () => <IconWrapper>📈</IconWrapper>;
+    const Clock = () => <IconWrapper>⏰</IconWrapper>;
+    const Users = () => <IconWrapper>👥</IconWrapper>;
+    const BarChart3 = () => <IconWrapper>📊</IconWrapper>;
 
     function NCRBusinessAnalyzer() {
       const [selectedBusiness, setSelectedBusiness] = useState('');
@@ -57,9 +158,7 @@
       const mapContainerRef = useRef(null);
       const mapInstanceRef = useRef(null);
       const markersLayerRef = useRef(null);
-      const analysisDataRef = useRef(null);
 
-      // Business categories
       const businessCategories = {
         Grocery: { talent: 0.2, cost: 0.3, procurement: 0.35, timing: 0.15 },
         Restaurant: { talent: 0.35, cost: 0.2, procurement: 0.25, timing: 0.2 },
@@ -80,7 +179,6 @@
         School: { talent: 0.5, cost: 0.3, procurement: 0.1, timing: 0.1 }
       };
 
-      // Micro-markets
       const microMarketData = [
         { name: 'Delhi CBD (Connaught Place)', rent: 284.45, vacancy: 18.3, absorption: 0.05, stock: 1.53, metroDistanceKm: 0.5, busDistanceKm: 0.2, rating: 4.5, college: 4, corporate: 5, timing: 'Standard B2B Day (10am-7pm)', timingDetail: 'Efficiency: 11:30 am - 5:00 pm.' },
         { name: 'Cyber City (Gurugram)', rent: 135.0, vacancy: 2.2, absorption: 0.1, stock: 13.99, metroDistanceKm: 1.2, busDistanceKm: 0.6, rating: 4.7, college: 3, corporate: 5, timing: 'Corporate B2B Day (9am-6pm)', timingDetail: 'Efficiency: 10:00 am - 5:00 pm.' },
@@ -178,29 +276,25 @@
         if (mapInstanceRef.current) {
           try { mapInstanceRef.current.remove(); } catch (e) {}
           mapInstanceRef.current = null;
-          markersLayerRef.current = null;
-          setMapLoaded(false);
         }
 
         try {
           const map = L.map(mapContainerRef.current, {
             center: [28.6139, 77.209],
-            zoom: 10,
-            scrollWheelZoom: true
+            zoom: 10
           });
 
           L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors',
+            attribution: '&copy; OpenStreetMap',
             maxZoom: 19
           }).addTo(map);
 
           const markersLayer = L.layerGroup().addTo(map);
           markersLayerRef.current = markersLayer;
 
-          const data = analysisDataRef.current || analysisData;
-          if (data && data.length > 0) {
+          if (analysisData && analysisData.length > 0) {
             const bounds = [];
-            data.slice(0, 5).forEach((market, idx) => {
+            analysisData.slice(0, 5).forEach((market, idx) => {
               const coords = getApproximateCoords(market.name);
               if (!coords) return;
               bounds.push(coords);
@@ -208,111 +302,49 @@
               const iconColor = idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#6366f1';
               const customIcon = L.divIcon({
                 className: 'custom-marker',
-                html: `
-                  <div style="background-color: ${iconColor}; width: 34px; height: 34px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; border:3px solid white;">
-                    ${idx + 1}
-                  </div>
-                `,
+                html: `<div style="background-color: ${iconColor}; width: 34px; height: 34px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; border:3px solid white;">${idx + 1}</div>`,
                 iconSize: [34, 34],
                 iconAnchor: [17, 17]
               });
 
               const marker = L.marker(coords, { icon: customIcon }).addTo(markersLayer);
-              const popupHtml = `
+              marker.bindPopup(`
                 <div style="font-family:sans-serif; min-width:200px;">
                   <div style="font-weight:bold; font-size:16px; margin-bottom:8px; color:${iconColor};">#${idx + 1} ${market.name}</div>
                   <div style="margin-bottom:4px;"><strong>Score:</strong> ${market.normalizedScore.toFixed(1)}/100</div>
                   <div style="margin-bottom:4px;"><strong>Rent:</strong> ₹${market.rent}/sqft</div>
                   <div style="margin-bottom:4px;"><strong>Vacancy:</strong> ${market.vacancy}%</div>
-                  <div style="margin-bottom:4px;"><strong>Dist to Metro:</strong> ${market.metroDistanceKm} km</div>
-                  <div style="margin-bottom:4px;"><strong>Dist to Bus:</strong> ${market.busDistanceKm} km</div>
-                  <div style="font-size:12px; color:#666; margin-top:8px; padding-top:8px; border-top:1px solid #eee;">${market.timing}</div>
+                  <div style="font-size:12px; color:#666; margin-top:8px;">${market.timing}</div>
                 </div>
-              `;
-              marker.bindPopup(popupHtml);
-              if (idx === 0) setTimeout(() => marker.openPopup(), 500);
+              `);
             });
 
             if (bounds.length > 0) map.fitBounds(bounds, { padding: [50, 50] });
-          } else {
-            map.setView([28.6139, 77.209], 10);
           }
 
           mapInstanceRef.current = map;
           setMapLoaded(true);
           setTimeout(() => { try { map.invalidateSize(); } catch (e) {} }, 100);
         } catch (error) {
-          console.error('createMap error', error);
+          console.error('Map error:', error);
         }
       };
 
-      // Toggle map
       useEffect(() => {
         if (showMap) {
-          analysisDataRef.current = analysisData;
           createMap();
         } else {
           if (mapInstanceRef.current) {
             try { mapInstanceRef.current.remove(); } catch (e) {}
             mapInstanceRef.current = null;
-            markersLayerRef.current = null;
-            setMapLoaded(false);
           }
         }
-      }, [showMap]);
+      }, [showMap, analysisData]);
 
-      // Refresh markers if analysis changes
-      useEffect(() => {
-        analysisDataRef.current = analysisData;
-
-        if (mapInstanceRef.current && showMap) {
-          if (markersLayerRef.current) markersLayerRef.current.clearLayers();
-          const data = analysisDataRef.current || analysisData;
-          if (data && data.length > 0 && markersLayerRef.current && mapInstanceRef.current) {
-            const bounds = [];
-            data.slice(0, 5).forEach((market, idx) => {
-              const coords = getApproximateCoords(market.name);
-              if (!coords) return;
-              bounds.push(coords);
-
-              const iconColor = idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#6366f1';
-              const customIcon = L.divIcon({
-                className: 'custom-marker',
-                html: `
-                  <div style="background-color: ${iconColor}; width: 34px; height: 34px; border-radius: 50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold; border:3px solid white; box-shadow:0 2px 4px rgba(0,0,0,0.3);">
-                    ${idx + 1}
-                  </div>
-                `,
-                iconSize: [34, 34],
-                iconAnchor: [17, 17]
-              });
-
-              const marker = L.marker(coords, { icon: customIcon }).addTo(markersLayerRef.current);
-              const popupHtml = `
-                <div style="font-family:sans-serif; min-width:200px;">
-                  <div style="font-weight:bold; font-size:16px; margin-bottom:8px; color:${iconColor};">#${idx + 1} ${market.name}</div>
-                  <div style="margin-bottom:4px;"><strong>Score:</strong> ${market.normalizedScore.toFixed(1)}/100</div>
-                  <div style="margin-bottom:4px;"><strong>Rent:</strong> ₹${market.rent}/sqft</div>
-                  <div style="margin-bottom:4px;"><strong>Vacancy:</strong> ${market.vacancy}%</div>
-                  <div style="margin-bottom:4px;"><strong>Dist to Metro:</strong> ${market.metroDistanceKm} km</div>
-                  <div style="margin-bottom:4px;"><strong>Dist to Bus:</strong> ${market.busDistanceKm} km</div>
-                  <div style="font-size:12px; color:#666; margin-top:8px; padding-top:8px; border-top:1px solid #eee;">${market.timing}</div>
-                </div>
-              `;
-              marker.bindPopup(popupHtml);
-            });
-
-            if (bounds.length > 0) mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50] });
-          }
-        }
-      }, [analysisData]);
-
-      // Cleanup on unmount
       useEffect(() => {
         return () => {
           if (mapInstanceRef.current) {
             try { mapInstanceRef.current.remove(); } catch (e) {}
-            mapInstanceRef.current = null;
           }
         };
       }, []);
@@ -322,11 +354,6 @@
         const scores = calculateScores(business);
         setAnalysisData(scores);
         setShowMap(false);
-        setMapLoaded(false);
-        if (mapInstanceRef.current) {
-          try { mapInstanceRef.current.remove(); } catch (e) {}
-          mapInstanceRef.current = null;
-        }
       };
 
       const getScoreColor = (score) => {
@@ -337,27 +364,12 @@
       };
 
       return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-          {/* Header */}
-          <div className="bg-white shadow-lg border-b-4 border-indigo-600">
-            <div className="max-w-7xl mx-auto px-4 py-6">
-              <div className="flex items-center gap-3">
-                <Building2 className="w-10 h-10 text-indigo-600" />
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900">NCR Business Location Intelligence</h1>
-                  <p className="text-gray-600">Data-driven insights for optimal business placement in Delhi-NCR</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="max-w-7xl mx-auto px-4 py-8">
-            {/* Business Type Selection */}
-            {!selectedBusiness && (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+          {!selectedBusiness && (
+            <div className="max-w-7xl mx-auto">
               <div className="bg-white rounded-2xl shadow-xl p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                  <Package className="w-6 h-6 text-indigo-600" />
-                  Select Your Business Type
+                  <Package /> Select Your Business Type
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {Object.keys(businessCategories).map((business) => (
@@ -371,243 +383,83 @@
                   ))}
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Analysis Results */}
-            {selectedBusiness && analysisData && (
-              <div className="space-y-6">
-                {/* Header with business type */}
-                <div className="bg-white rounded-2xl shadow-xl p-6">
-                  <div className="flex items-center justify-between flex-wrap gap-4">
-                    <div>
-                      <h2 className="text-2xl font-bold text-gray-900">
-                        Analysis for: <span className="text-indigo-600">{selectedBusiness}</span>
-                      </h2>
-                      <p className="text-gray-600 mt-1">
-                        Top {analysisData.length} micro-markets ranked by suitability score
-                      </p>
-                    </div>
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => setShowMap(!showMap)}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
-                      >
-                        <MapPin className="w-5 h-5" />
-                        {showMap ? 'Hide Map' : 'Show Map'}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedBusiness('');
-                          setAnalysisData(null);
-                          setShowMap(false);
-                        }}
-                        className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-                      >
-                        Change Business
-                      </button>
-                    </div>
+          {selectedBusiness && analysisData && (
+            <div className="max-w-7xl mx-auto space-y-6">
+              <div className="bg-white rounded-2xl shadow-xl p-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Analysis for: <span className="text-indigo-600">{selectedBusiness}</span>
+                    </h2>
                   </div>
-                </div>
-
-                {/* Interactive Map (no pincode input anymore) */}
-                {showMap && (
-                  <div className="bg-white rounded-2xl shadow-xl p-6 space-y-4">
-                    <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <MapPin className="w-6 h-6 text-indigo-600" />
-                      Interactive Location Map - Top 5 Locations
-                    </h3>
-                    <div
-                      ref={mapContainerRef}
-                      className="w-full h-[500px] rounded-lg border-2 border-gray-200 bg-gray-100"
-                      style={{ position: 'relative' }}
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() => setShowMap(!showMap)}
+                      className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
                     >
-                      {!mapLoaded && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-                            <p className="text-gray-600">Loading map...</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600">
-                      📍 Click on the numbered markers to see details for the top 5 recommended locations.
-                    </p>
-                  </div>
-                )}
-
-                {/* Top Recommendation Card */}
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl p-8 text-white">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-white/20 p-3 rounded-lg">
-                      <TrendingUp className="w-8 h-8" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold mb-2">🏆 Top Recommended Location</h3>
-                      <h4 className="text-3xl font-bold mb-4">{analysisData[0].name}</h4>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="bg-white/10 rounded-lg p-3">
-                          <div className="text-sm opacity-90">Overall Score</div>
-                          <div className="text-2xl font-bold">{analysisData[0].normalizedScore.toFixed(1)}/100</div>
-                        </div>
-                        <div className="bg-white/10 rounded-lg p-3">
-                          <div className="text-sm opacity-90">Rent per SqFt</div>
-                          <div className="text-2xl font-bold">₹{analysisData[0].rent}</div>
-                        </div>
-                        <div className="bg-white/10 rounded-lg p-3">
-                          <div className="text-sm opacity-90">Vacancy Rate</div>
-                          <div className="text-2xl font-bold">{analysisData[0].vacancy}%</div>
-                        </div>
-                        <div className="bg-white/10 rounded-lg p-3">
-                          <div className="text-sm opacity-90">Dist to Metro</div>
-                          <div className="text-2xl font-bold">{analysisData[0].metroDistanceKm} km</div>
-                        </div>
-                      </div>
-                      <div className="mt-4 bg-white/10 rounded-lg p-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Clock className="w-5 h-5" />
-                          <span className="font-semibold">{analysisData[0].timing}</span>
-                        </div>
-                        <div className="text-sm opacity-90">{analysisData[0].timingDetail}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Detailed Rankings */}
-                <div className="bg-white rounded-2xl shadow-xl p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <BarChart3 className="w-6 h-6 text-indigo-600" />
-                    Detailed Market Rankings
-                  </h3>
-                  <div className="space-y-4">
-                    {analysisData.map((market, idx) => (
-                      <div
-                        key={market.name}
-                        className="border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition-all"
-                      >
-                        <div className="flex items-start justify-between gap-4 mb-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <span className="text-2xl font-bold text-indigo-600">#{idx + 1}</span>
-                              <h4 className="text-xl font-bold text-gray-900">{market.name}</h4>
-                            </div>
-                            <div className="flex items-center gap-2 text-gray-600">
-                              <Clock className="w-4 h-4" />
-                              <span className="text-sm">{market.timing}</span>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-sm text-gray-600">Suitability Score</div>
-                            <div className={`text-3xl font-bold ${getScoreColor(market.normalizedScore)}`}>
-                              {market.normalizedScore.toFixed(1)}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Score Breakdown */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                          <div className="bg-blue-50 rounded-lg p-3">
-                            <div className="flex items-center gap-2 text-blue-700 mb-1">
-                              <Users className="w-4 h-4" />
-                              <span className="text-xs font-semibold">Talent</span>
-                            </div>
-                            <div className="text-lg font-bold text-blue-900">
-                              {(market.talentScore * 100).toFixed(0)}%
-                            </div>
-                          </div>
-                          <div className="bg-green-50 rounded-lg p-3">
-                            <div className="flex items-center gap-2 text-green-700 mb-1">
-                              <TrendingUp className="w-4 h-4" />
-                              <span className="text-xs font-semibold">Cost</span>
-                            </div>
-                            <div className="text-lg font-bold text-green-900">
-                              {(market.costScore * 100).toFixed(0)}%
-                            </div>
-                          </div>
-                          <div className="bg-purple-50 rounded-lg p-3">
-                            <div className="flex items-center gap-2 text-purple-700 mb-1">
-                              <Package className="w-4 h-4" />
-                              <span className="text-xs font-semibold">Procurement</span>
-                            </div>
-                            <div className="text-lg font-bold text-purple-900">
-                              {(market.procurementScore * 100).toFixed(0)}%
-                            </div>
-                          </div>
-                          <div className="bg-orange-50 rounded-lg p-3">
-                            <div className="flex items-center gap-2 text-orange-700 mb-1">
-                              <Clock className="w-4 h-4" />
-                              <span className="text-xs font-semibold">Timing</span>
-                            </div>
-                            <div className="text-lg font-bold text-orange-900">
-                              {(market.timingScore * 100).toFixed(0)}%
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Market Details */}
-                        <div className="grid grid-cols-3 md:grid-cols-6 gap-3 text-sm">
-                          <div>
-                            <div className="text-gray-600">Rent/SqFt</div>
-                            <div className="font-semibold">₹{market.rent}</div>
-                          </div>
-                          <div>
-                            <div className="text-gray-600">Vacancy</div>
-                            <div className="font-semibold">{market.vacancy}%</div>
-                          </div>
-                          <div>
-                            <div className="text-gray-600">Absorption</div>
-                            <div className="font-semibold">{market.absorption} MSF</div>
-                          </div>
-                          <div>
-                            <div className="text-gray-600">Dist to Metro</div>
-                            <div className="font-semibold">{market.metroDistanceKm} km</div>
-                          </div>
-                          <div>
-                            <div className="text-gray-600">Dist to Bus</div>
-                            <div className="font-semibold">{market.busDistanceKm} km</div>
-                          </div>
-                          <div>
-                            <div className="text-gray-600">Rating</div>
-                            <div className="font-semibold">{market.rating}/5</div>
-                          </div>
-                        </div>
-
-                        {/* Timing Details */}
-                        <div className="mt-4 bg-gray-50 rounded-lg p-3">
-                          <div className="text-xs text-gray-700">{market.timingDetail}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Insights Panel */}
-                <div className="bg-white rounded-2xl shadow-xl p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">💡 Key Insights</h3>
-                  <div className="space-y-3 text-gray-700">
-                    <p>• <strong>Best Overall:</strong> {analysisData[0].name} offers the optimal balance for your {selectedBusiness} business</p>
-                    <p>• <strong>Cost Leader:</strong> {[...analysisData].sort((a,b) => a.rent - b.rent)[0].name} has the lowest rent at ₹{[...analysisData].sort((a,b) => a.rent - b.rent)[0].rent}/sqft</p>
-                    <p>• <strong>Talent Hub:</strong> {[...analysisData].sort((a,b) => b.college - a.college)[0].name} provides the best access to talent pool</p>
-                    <p>• <strong>Growth Market:</strong> {[...analysisData].sort((a,b) => b.absorption - a.absorption)[0].name} shows highest absorption rate at {[...analysisData].sort((a,b) => b.absorption - a.absorption)[0].absorption} MSF</p>
+                      <MapPin /> {showMap ? 'Hide Map' : 'Show Map'}
+                    </button>
+                    <button
+                      onClick={() => { setSelectedBusiness(''); setAnalysisData(null); setShowMap(false); }}
+                      className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                    >
+                      Change Business
+                    </button>
                   </div>
                 </div>
               </div>
-            )}
-          </div>
-        </div>
-      );
-    }
 
-    // Mount React app
-    if (typeof window !== 'undefined' && window.document) {
-      if (window.React && window.ReactDOM) {
-        const rootEl = document.getElementById('root');
-        if (rootEl) {
-          ReactDOM.createRoot(rootEl).render(React.createElement(NCRBusinessAnalyzer));
-        }
-      }
-    }
-  </script>
-</body>
-</html>
+              {showMap && (
+                <div className="bg-white rounded-2xl shadow-xl p-6">
+                  <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <MapPin /> Interactive Location Map - Top 5
+                  </h3>
+                  <div ref={mapContainerRef} className="w-full h-[500px] rounded-lg border-2 border-gray-200 bg-gray-100"></div>
+                </div>
+              )}
+
+              <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl p-8 text-white">
+                <h3 className="text-2xl font-bold mb-2">🏆 Top Recommended Location</h3>
+                <h4 className="text-3xl font-bold mb-4">{analysisData[0].name}</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="text-sm opacity-90">Overall Score</div>
+                    <div className="text-2xl font-bold">{analysisData[0].normalizedScore.toFixed(1)}/100</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="text-sm opacity-90">Rent per SqFt</div>
+                    <div className="text-2xl font-bold">₹{analysisData[0].rent}</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="text-sm opacity-90">Vacancy Rate</div>
+                    <div className="text-2xl font-bold">{analysisData[0].vacancy}%</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3">
+                    <div className="text-sm opacity-90">Metro Distance</div>
+                    <div className="text-2xl font-bold">{analysisData[0].metroDistanceKm} km</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-xl p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <BarChart3 /> Detailed Market Rankings
+                </h3>
+                <div className="space-y-4">
+                  {analysisData.map((market, idx) => (
+                    <div key={market.name} className="border-2 border-gray-200 rounded-xl p-6 hover:border-indigo-300 transition-all">
+                      <div className="flex items-start justify-between gap-4 mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <span className="text-2xl font-bold text-indigo-600">#{idx + 1}</span>
+                            <h4 className="text-xl font-bold text-gray-900">{market.name}</h4>
+                          </div>
+                          <div className="flex items-center gap-2 text-gray-600">
+                            <Clock /> <span className="text-sm">{market.timing}</span>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-sm text-gray-600">Score
